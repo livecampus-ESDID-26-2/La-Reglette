@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Enum\Cotation;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -95,26 +96,7 @@ final class HomeController extends AbstractController
           'texte' => 'Il tient les secteurs, les comptes et les rôles. Il peut modifier toute la salle.',
         ],
       ],
-      'cotations' => [
-        '3',
-        '4',
-        '5',
-        '5+',
-        '6A',
-        '6A+',
-        '6B',
-        '6B+',
-        '6C',
-        '6C+',
-        '7A',
-        '7A+',
-        '7B',
-        '7B+',
-        '7C',
-        '7C+',
-        '8A',
-        '8A+',
-      ],
+      'cotations' => array_map(static fn(Cotation $cotation): string => $cotation->label(), Cotation::cases()),
     ]);
   }
 }
