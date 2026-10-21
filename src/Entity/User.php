@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -46,6 +48,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   #[Assert\NotBlank]
   #[Assert\Length(max: 255)]
   private ?string $nom = null;
+
+  /**
+   * @var Collection<int, Bloc>
+   */
+  #[ORM\OneToMany(targetEntity: Bloc::class, mappedBy: 'ouvreur')]
+  private Collection $blocsOuverts;
+
+  /**
+   * @var Collection<int, Ascension>
+   */
+  #[ORM\OneToMany(targetEntity: Ascension::class, mappedBy: 'grimpeur')]
+  private Collection $ascensions;
+
+  public function __construct()
+  {
+    $this->blocsOuverts = new ArrayCollection();
+    $this->ascensions = new ArrayCollection();
+  }
 
   public function getId(): ?int
   {
@@ -148,6 +168,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
   public function setNom(string $nom): static
   {
     $this->nom = $nom;
+
+    return $this;
+  }
+
+  /**
+   * @return Collection<int, Bloc>
+   */
+  public function getBlocsOuverts(): Collection
+  {
+    return $this->blocsOuverts;
+  }
+
+  public function addBlocsOuvert(Bloc $blocsOuvert): static
+  {
+    if (!$this->blocsOuverts->contains($blocsOuvert)) {
+      $this->blocsOuverts->add($blocsOuvert);
+      $blocsOuvert->setOuvreur($this);
+    }
+
+    return $this;
+  }
+
+  public function removeBlocsOuvert(Bloc $blocsOuvert): static
+  {
+    if ($this->blocsOuverts->removeElement($blocsOuvert)) {
+      // set the owning side to null (unless already changed)
+      if ($blocsOuvert->getOuvreur() === $this) {
+        $blocsOuvert->setOuvreur(null);
+      }
+    }
+
+    return $this;
+  }
+
+  /**
+   * @return Collection<int, Ascension>
+   */
+  public function getAscensions(): Collection
+  {
+    return $this->ascensions;
+  }
+
+  public function addAscension(Ascension $ascension): static
+  {
+    if (!$this->ascensions->contains($ascension)) {
+      $this->ascensions->add($ascension);
+      $ascension->setGrimpeur($this);
+    }
+
+    return $this;
+  }
+
+  public function removeAscension(Ascension $ascension): static
+  {
+    if ($this->ascensions->removeElement($ascension)) {
+      // set the owning side to null (unless already changed)
+      if ($ascension->getGrimpeur() === $this) {
+        $ascension->setGrimpeur(null);
+      }
+    }
 
     return $this;
   }
