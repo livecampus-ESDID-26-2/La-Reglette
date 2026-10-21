@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Ascension;
+use App\Entity\Bloc;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,34 @@ class AscensionRepository extends ServiceEntityRepository
     parent::__construct($registry, Ascension::class);
   }
 
-  //    /**
-  //     * @return Ascension[] Returns an array of Ascension objects
-  //     */
-  //    public function findByExampleField($value): array
-  //    {
-  //        return $this->createQueryBuilder('a')
-  //            ->andWhere('a.exampleField = :val')
-  //            ->setParameter('val', $value)
-  //            ->orderBy('a.id', 'ASC')
-  //            ->setMaxResults(10)
-  //            ->getQuery()
-  //            ->getResult()
-  //        ;
-  //    }
+  /**
+   * @return list<Ascension>
+   */
+  public function findParGrimpeur(User $grimpeur): array
+  {
+    return $this->createQueryBuilder('a')
+      ->addSelect('b', 's')
+      ->innerJoin('a.bloc', 'b')
+      ->innerJoin('b.secteur', 's')
+      ->andWhere('a.grimpeur = :grimpeur')
+      ->setParameter('grimpeur', $grimpeur)
+      ->orderBy('a.dateReussite', 'DESC')
+      ->getQuery()
+      ->getResult();
+  }
 
-  //    public function findOneBySomeField($value): ?Ascension
-  //    {
-  //        return $this->createQueryBuilder('a')
-  //            ->andWhere('a.exampleField = :val')
-  //            ->setParameter('val', $value)
-  //            ->getQuery()
-  //            ->getOneOrNullResult()
-  //        ;
-  //    }
+  /**
+   * @return list<Ascension>
+   */
+  public function findParGrimpeurEtBloc(User $grimpeur, Bloc $bloc): array
+  {
+    return $this->createQueryBuilder('a')
+      ->andWhere('a.grimpeur = :grimpeur')
+      ->andWhere('a.bloc = :bloc')
+      ->setParameter('grimpeur', $grimpeur)
+      ->setParameter('bloc', $bloc)
+      ->orderBy('a.dateReussite', 'DESC')
+      ->getQuery()
+      ->getResult();
+  }
 }

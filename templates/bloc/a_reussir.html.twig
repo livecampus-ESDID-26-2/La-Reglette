@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  À réussir — La Réglette
+{% endblock %}
+
+{% block body %}
+  <main class="sheet">
+    <header class="sheet-heading">
+      <p class="section-index">
+        Salle
+      </p>
+      <h1>Blocs à réussir</h1>
+      <p class="lead">
+        Ceux qui sont encore en place, et que vous n'avez jamais enchaînés.
+      </p>
+    </header>
+
+    {% include 'bloc/_table.html.twig' with {
+      blocs: blocs
+    } %}
+  </main>
+{% endblock %}

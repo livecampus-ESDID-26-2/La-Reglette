@@ -1,0 +1,29 @@
+{% set route = app.request.attributes.get('_route') %}
+{% set blocs = route
+  in [
+    'app_bloc_index',
+    'app_bloc_show',
+    'app_bloc_edit',
+    'app_bloc_demonter',
+    'app_ascension_create',
+    'app_ouvreur_show'
+  ]
+%}
+{% set aReussir = route == 'app_bloc_a_reussir' %}
+{% set reussites = route in ['app_ascension_index', 'app_ascension_delete'] %}
+{% set nouveau = route in ['app_bloc_new', 'app_bloc_create'] %}
+{% set secteurs = route starts with 'app_admin_secteur_' %}
+{% set comptes = route starts with 'app_admin_user_' %}
+
+<nav class="subnav" aria-label="Salle">
+  <a href="{{ path('app_bloc_index') }}" class="{{ blocs ? 'is-current' : '' }}">Blocs</a>
+  <a href="{{ path('app_bloc_a_reussir') }}" class="{{ aReussir ? 'is-current' : '' }}">À réussir</a>
+  <a href="{{ path('app_ascension_index') }}" class="{{ reussites ? 'is-current' : '' }}">Mes réussites</a>
+  {% if is_granted('ROLE_OUVREUR') %}
+    <a href="{{ path('app_bloc_new') }}" class="{{ nouveau ? 'is-current' : '' }}">Nouveau bloc</a>
+  {% endif %}
+  {% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('app_admin_secteur_index') }}" class="{{ secteurs ? 'is-current' : '' }}">Secteurs</a>
+    <a href="{{ path('app_admin_user_index') }}" class="{{ comptes ? 'is-current' : '' }}">Comptes</a>
+  {% endif %}
+</nav>

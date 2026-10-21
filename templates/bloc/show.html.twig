@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  {{ bloc.nom }} — La Réglette
+{% endblock %}
+
+{% block body %}
+  <main class="sheet">
+    <header class="sheet-heading">
+      <p class="section-index">
+        {{ bloc.enPlace ? 'En place' : 'Démonté' }}
+      </p>
+      <h1>{{ bloc.nom }}</h1>
+      <p class="lead">
+        {{ bloc.cotation.label }} · {{ bloc.couleur.label }} · {{ bloc.secteur.nom }}
+      </p>
+    </header>
+
+    <dl class="facts">
+      <div>
+        <dt>
+          Ouverture
+        </dt>
+        <dd>{{ bloc.dateOuverture|date('d/m/Y') }}</dd>
+      </div>
+      <div>
+        <dt>
+          Ouvreur
+        </dt>
+        <dd>
+          <a
+            href="{{
+            path(
+              'app_ouvreur_show',
+              {
+                id: bloc.ouvreur.id
+              }
+            )
+            }}"
+          >
+            {{ bloc.ouvreur.prenom }} {{ bloc.ouvreur.nom }}
+          </a>
+        </dd>
+      </div>
+      <div>
+        <dt>
+          Réussites
+        </dt>
+        <dd>{{ bloc.nombreReussites }}</dd>
+      </div>
+      <div>
+        <dt>
+          Note moyenne
+        </dt>
+        <dd>{{ bloc.noteMoyenne is null ? '—' : bloc.noteMoyenne|number_format(1, ',') }}</dd>
+      </div>
+      {% if not bloc.enPlace %}
+        <div>
+          <dt>
+            Démontage
+          </dt>
+          <dd>{{ bloc.dateDemontage|date('d/m/Y') }}</dd>
+        </div>
+      {% endif %}
+    </dl>
+
+    <section class="sheet-block lecture">
+      <h2>Lire ce bloc</h2>
+      <dl>
+        <div>
+          <dt>
+            Couleur · {{ bloc.couleur.label|capitalize }}
+          </dt>
+          <dd>{{ bloc.couleur.explication }}</dd>
+        </div>
+        <div>
+          <dt>
+            Cotation · {{ bloc.cotation.label }}
+          </dt>
+          <dd>{{ bloc.cotation.explication }}</dd>
+        </div>
+        <div>
+          <dt>
+            Secteur · {{ bloc.secteur.nom }}
+          </dt>
+          <dd>{{ bloc.secteur.explication }}</dd>
+        </div>
+      </dl>
+      <p class="guide-link">
+        <a href="{{ path('app_home') }}#couleurs">Toutes les couleurs, cotations et secteurs</a>
+      </p>
+    </section>
+
+    <div class="actions">
+      {% if is_granted('BLOC_EDIT', bloc) %}
+        <a
+          class="button"
+          href="{{
+          path(
+            'app_bloc_edit',
+            {
+              id: bloc.id
+            }
+          )
+          }}"
+        >
+          Modifier
+        </a>
+      {% endif %}
+      {% if is_granted('BLOC_DEMONTER', bloc) and bloc.enPlace %}
+        <form
+          method="post"
+          action="{{
+          path(
+            'app_bloc_demonter',
+            {
+              id: bloc.id
+            }
+          )
+          }}"
+        >
+          <input type="hidden" name="_token" value="{{ csrf_token('demonter' ~ bloc.id) }}" />
+          <button class="button button-quiet" type="submit">Démonter</button>
+        </form>
+      {% endif %}
+    </div>
+
+    {% if bloc.enPlace %}
+      <section class="sheet-block">
+        <h2>Enregistrer une réussite</h2>
+        {{ form_start(ascensionForm) }}
+        {{ form_errors(ascensionForm) }}
+        {{ form_row(ascensionForm.dateReussite) }}
+        {{ form_row(ascensionForm.note) }}
+        {{ form_row(ascensionForm.commentaire) }}
+        <button class="button" type="submit">Enregistrer</button>
+        {{ form_end(ascensionForm) }}
+      </section>
+    {% endif %}
+
+    <section class="sheet-block">
+      <h2>Vos réussites sur ce bloc</h2>
+      {% if miennes is empty %}
+        <p>
+          Vous ne l'avez pas encore enchaîné.
+        </p>
+      {% else %}
+        <ul class="plain">
+          {% for ascension in miennes %}
+            <li>
+              {{ ascension.dateReussite|date('d/m/Y') }} · note {{ ascension.note }}
+              {% if ascension.commentaire %}
+                — {{ ascension.commentaire }}
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+  </main>
+{% endblock %}

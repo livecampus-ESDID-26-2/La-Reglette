@@ -2,7 +2,7 @@
   <a class="brand" href="{{ path('app_home') }}">La Réglette</a>
   <nav class="topbar-links">
     {% if app.user %}
-      <span>{{ app.user.prenom }} {{ app.user.nom }}</span>
+      <a href="{{ path('app_profil') }}">Profil</a>
       <a href="{{ path('app_logout') }}">Se déconnecter</a>
     {% else %}
       <a href="{{ path('app_login') }}">Connexion</a>

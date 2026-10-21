@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Blocs en place — La Réglette
+{% endblock %}
+
+{% block body %}
+  <main class="sheet">
+    <header class="sheet-heading">
+      <p class="section-index">
+        Salle
+      </p>
+      <h1>Blocs en place</h1>
+      <p class="guide-link">
+        <a href="{{ path('app_home') }}#couleurs">Couleurs, cotations et secteurs</a>
+      </p>
+    </header>
+
+    {{
+      form_start(
+        filtreForm,
+        {
+          attr: {
+            class: 'filters'
+          }
+        }
+      )
+    }}
+    {{ form_errors(filtreForm) }}
+    {{ form_row(filtreForm.secteur) }}
+    {{ form_row(filtreForm.cotationMin) }}
+    {{ form_row(filtreForm.cotationMax) }}
+    <button class="button" type="submit">Filtrer</button>
+    {{ form_end(filtreForm) }}
+
+    {% include 'bloc/_table.html.twig' with {
+      blocs: blocs
+    } %}
+  </main>
+{% endblock %}

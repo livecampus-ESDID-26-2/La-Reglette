@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Secteurs — La Réglette
+{% endblock %}
+
+{% block body %}
+  <main class="sheet">
+    <header class="sheet-heading">
+      <p class="section-index">
+        Admin
+      </p>
+      <h1>Secteurs</h1>
+    </header>
+
+    <section class="sheet-block sheet-narrow">
+      <h2>Nouveau secteur</h2>
+      {{ form_start(form) }}
+      {{ form_errors(form) }}
+      {{ form_row(form.nom) }}
+      <button class="button" type="submit">Créer</button>
+      {{ form_end(form) }}
+    </section>
+
+    <table class="data">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Blocs</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for secteur in secteurs %}
+          <tr>
+            <td>{{ secteur.nom }}</td>
+            <td>{{ secteur.blocs|length }}</td>
+            <td>
+              <a
+                href="{{
+                path(
+                  'app_admin_secteur_edit',
+                  {
+                    id: secteur.id
+                  }
+                )
+                }}"
+              >
+                Modifier
+              </a>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="3">Aucun secteur.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+{% endblock %}

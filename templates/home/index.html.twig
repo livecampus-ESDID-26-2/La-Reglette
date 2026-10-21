@@ -26,6 +26,7 @@
 
     <ul class="hold-strip" aria-hidden="true">
       <li class="hold hold-yellow"></li>
+      <li class="hold hold-orange"></li>
       <li class="hold hold-green"></li>
       <li class="hold hold-blue"></li>
       <li class="hold hold-red"></li>
@@ -136,20 +137,97 @@
         <p class="section-index">
           05
         </p>
-        <h2>Lire un secteur</h2>
+        <h2>Trois façons de lire un bloc</h2>
         <p>
-          Les prises d'une même couleur forment un bloc. Autour, d'autres couleurs racontent d'autres passages. Le
-          secteur dit simplement où regarder : un pan, un toit, un dévers.
+          La couleur dit quelles prises suivre. La cotation dit si le passage est facile ou dur. Le secteur dit où se
+          placer dans la salle. Les trois se lisent séparément.
         </p>
         <p>
-          La cotation classe ces passages. Entre 6A et 8A, chaque niveau existe en version simple et en version « + ».
+          <a href="#couleurs">Les couleurs</a>, <a href="#cotations">les cotations</a>,
+          <a href="#secteurs">les secteurs</a>.
         </p>
-        <ol class="grades" aria-label="Échelle de cotation, de 3 à 8A+">
-          {% for cotation in cotations %}
-            <li>{{ cotation }}</li>
-          {% endfor %}
-        </ol>
       </div>
+    </section>
+
+    <section class="guide" id="couleurs">
+      <header class="section-heading">
+        <p class="section-index">
+          06
+        </p>
+        <h2>Chaque couleur de prises</h2>
+      </header>
+      <p class="guide-lead">
+        La couleur ne mesure pas la difficulté. Elle rassemble les prises d’un même bloc. On ne pose les mains et les
+        pieds que sur cette couleur, du départ à l’arrivée.
+      </p>
+      <ul class="swatches">
+        {% for couleur in couleurs %}
+          <li>
+            <span class="swatch {{ couleur.pastille }}" aria-hidden="true"></span>
+            <h3>{{ couleur.label|capitalize }}</h3>
+            <p>
+              {{ couleur.explication }}
+            </p>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="guide" id="cotations">
+      <header class="section-heading">
+        <p class="section-index">
+          07
+        </p>
+        <h2>Chaque cotation</h2>
+      </header>
+      <p class="guide-lead">
+        L’échelle est française, celle de Fontainebleau, de 3 à 8A+. Le « + » est le même cran, un peu plus dur, pas
+        encore le suivant.
+      </p>
+      <ol class="grades" aria-label="Échelle de cotation, de 3 à 8A+">
+        {% for cotation in cotations %}
+          <li>{{ cotation.label }}</li>
+        {% endfor %}
+      </ol>
+      <ol class="scale">
+        {% for cotation in cotations %}
+          <li>
+            <strong>{{ cotation.label }}</strong>
+            <p>
+              {{ cotation.explication }}
+            </p>
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section class="guide" id="secteurs">
+      <header class="section-heading">
+        <p class="section-index">
+          08
+        </p>
+        <h2>Chaque secteur</h2>
+      </header>
+      <p class="guide-lead">
+        Le secteur dit où se placer dans la salle. Le nom décrit la forme du mur, pas la difficulté des blocs qui y sont
+        ouverts.
+      </p>
+      {% if secteurs is empty %}
+        <p>
+          Aucun secteur pour l’instant.
+        </p>
+      {% else %}
+        <ul class="swatches">
+          {% for secteur in secteurs %}
+            <li>
+              <h3>{{ secteur.nom }}</h3>
+              <p>
+                {{ secteur.texte }}
+              </p>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </section>
 
     <section class="credits">

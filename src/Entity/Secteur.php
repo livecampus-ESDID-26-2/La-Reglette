@@ -6,8 +6,11 @@ use App\Repository\SecteurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SecteurRepository::class)]
+#[UniqueEntity(fields: ['nom'], message: 'Un secteur porte déjà ce nom.')]
 class Secteur
 {
   #[ORM\Id]
@@ -16,6 +19,8 @@ class Secteur
   private ?int $id = null;
 
   #[ORM\Column(length: 255, unique: true)]
+  #[Assert\NotBlank(message: 'Indiquez un nom.')]
+  #[Assert\Length(max: 255)]
   private ?string $nom = null;
 
   /**
@@ -44,6 +49,17 @@ class Secteur
     $this->nom = $nom;
 
     return $this;
+  }
+
+  public function explication(): string
+  {
+    return match ($this->nom) {
+      'Dalle' => 'Le mur penche en arrière. Les pieds portent le corps : on cherche l’équilibre plus que la force.',
+      'Pan' => 'Le mur est vertical. Le corps reste proche des prises, les mains et les pieds se partagent l’effort.',
+      'Dévers' => 'Le mur penche au-dessus du grimpeur. Les bras et le gainage travaillent plus que sur un pan.',
+      'Toit' => 'Le mur est presque à l’horizontale. On grimpe dessous : c’est le secteur le plus physique.',
+      default => 'Une zone de la salle. Les blocs de ce secteur sont regroupés au même endroit du mur.',
+    };
   }
 
   /**

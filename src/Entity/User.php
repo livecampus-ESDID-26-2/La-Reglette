@@ -116,6 +116,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return $this;
   }
 
+  public function getRolePrincipal(): string
+  {
+    return $this->roles[0] ?? 'ROLE_GRIMPEUR';
+  }
+
   /**
    * @see PasswordAuthenticatedUserInterface
    */

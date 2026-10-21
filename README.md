@@ -14,7 +14,7 @@ docker compose exec app php bin/console doctrine:fixtures:load --no-interaction
 
 Le site est sur http://localhost:8000.
 
-`doctrine:fixtures:load` vide la base puis recrée les comptes ci-dessous.
+`doctrine:fixtures:load` vide la base puis recrée les comptes, 4 secteurs, 40 blocs et leurs réussites.
 
 ## Prettier
 
@@ -33,10 +33,10 @@ Le plugin Twig ne lit pas une balise `{% %}` placée dans un attribut HTML. Pour
 
 ## Comptes
 
-Les trois comptes ont le même mot de passe : `Reglette2026!`
+Tous les comptes ont le même mot de passe : `Reglette2026!`
 
 | Rôle | Email |
 | --- | --- |
 | Admin | admin@lareglette.test |
-| Ouvreur | ouvreur@lareglette.test |
-| Grimpeur | grimpeur@lareglette.test |
+| Ouvreurs | ouvreur1@lareglette.test à ouvreur3@lareglette.test |
+| Grimpeurs | grimpeur01@lareglette.test à grimpeur20@lareglette.test |

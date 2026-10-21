@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Comptes — La Réglette
+{% endblock %}
+
+{% block body %}
+  <main class="sheet">
+    <header class="sheet-heading">
+      <p class="section-index">
+        Admin
+      </p>
+      <h1>Comptes</h1>
+    </header>
+
+    <table class="data">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for compte in comptes %}
+          <tr>
+            <td>{{ compte.prenom }} {{ compte.nom }}</td>
+            <td>{{ compte.email }}</td>
+            <td>
+              {{
+                form_start(
+                  forms[compte.id],
+                  {
+                    attr: {
+                      class: 'inline-form'
+                    }
+                  }
+                )
+              }}
+              {{ form_widget(forms[compte.id].role) }}
+              <button class="button" type="submit">Enregistrer</button>
+              {{ form_end(forms[compte.id]) }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+{% endblock %}

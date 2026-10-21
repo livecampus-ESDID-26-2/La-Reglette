@@ -8,6 +8,7 @@ use App\Repository\BlocRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BlocRepository::class)]
 #[ORM\Index(columns: ['date_demontage', 'cotation'])]
@@ -21,15 +22,20 @@ class Bloc
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
+  #[Assert\NotBlank(message: 'Indiquez un nom.')]
+  #[Assert\Length(max: 255)]
   private ?string $nom = null;
 
   #[ORM\Column(enumType: CouleurPrise::class)]
+  #[Assert\NotNull(message: 'Choisissez une couleur.')]
   private ?CouleurPrise $couleur = null;
 
   #[ORM\Column(enumType: Cotation::class)]
+  #[Assert\NotNull(message: 'Choisissez une cotation.')]
   private ?Cotation $cotation = null;
 
   #[ORM\Column]
+  #[Assert\NotNull(message: 'Indiquez la date d\'ouverture.')]
   private ?\DateTimeImmutable $dateOuverture = null;
 
   #[ORM\Column(nullable: true)]
@@ -43,6 +49,7 @@ class Bloc
 
   #[ORM\ManyToOne(inversedBy: 'blocs')]
   #[ORM\JoinColumn(nullable: false)]
+  #[Assert\NotNull(message: 'Choisissez un secteur.')]
   private ?Secteur $secteur = null;
 
   #[ORM\ManyToOne(inversedBy: 'blocsOuverts')]
@@ -123,6 +130,11 @@ class Bloc
     $this->dateDemontage = $dateDemontage;
 
     return $this;
+  }
+
+  public function isEnPlace(): bool
+  {
+    return $this->dateDemontage === null;
   }
 
   public function getNombreReussites(): int

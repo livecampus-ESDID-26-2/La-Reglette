@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Secteur;
 use App\Enum\Cotation;
+use App\Enum\CouleurPrise;
+use App\Repository\SecteurRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -10,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
   #[Route('/', name: 'app_home')]
-  public function index(): Response
+  public function index(SecteurRepository $secteurs): Response
   {
     return $this->render('home/index.html.twig', [
       'photos' => [
@@ -96,7 +99,31 @@ final class HomeController extends AbstractController
           'texte' => 'Il tient les secteurs, les comptes et les rôles. Il peut modifier toute la salle.',
         ],
       ],
-      'cotations' => array_map(static fn(Cotation $cotation): string => $cotation->label(), Cotation::cases()),
+      'couleurs' => CouleurPrise::cases(),
+      'cotations' => Cotation::cases(),
+      'secteurs' => $this->secteursExpliques($secteurs),
     ]);
+  }
+
+  /**
+   * @return list<array{nom: string, texte: string}>
+   */
+  private function secteursExpliques(SecteurRepository $secteurs): array
+  {
+    $ordre = ['Dalle' => 0, 'Pan' => 1, 'Dévers' => 2, 'Toit' => 3];
+    $liste = $secteurs->findBy([], ['nom' => 'ASC']);
+    usort(
+      $liste,
+      static fn(Secteur $a, Secteur $b): int => ($ordre[$a->getNom()] ?? 100) <=> ($ordre[$b->getNom()] ?? 100) ?:
+      strcmp((string) $a->getNom(), (string) $b->getNom()),
+    );
+
+    return array_map(
+      static fn(Secteur $secteur): array => [
+        'nom' => (string) $secteur->getNom(),
+        'texte' => $secteur->explication(),
+      ],
+      $liste,
+    );
   }
 }

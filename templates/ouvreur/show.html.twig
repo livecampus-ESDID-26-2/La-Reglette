@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  {{ ouvreur.prenom }} {{ ouvreur.nom }} — La Réglette
+{% endblock %}
+
+{% block body %}
+  <main class="sheet">
+    <header class="sheet-heading">
+      <p class="section-index">
+        Ouvreur
+      </p>
+      <h1>{{ ouvreur.prenom }} {{ ouvreur.nom }}</h1>
+    </header>
+
+    {% include 'bloc/_table.html.twig' with {
+      blocs: blocs,
+      avecDemontage: true
+    } %}
+  </main>
+{% endblock %}

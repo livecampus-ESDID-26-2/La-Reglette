@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  {{ bloc.id ? 'Modifier' : 'Nouveau bloc' }} — La Réglette
+{% endblock %}
+
+{% block body %}
+  <main class="sheet sheet-narrow">
+    <header class="sheet-heading">
+      <p class="section-index">
+        Ouverture
+      </p>
+      <h1>{{ bloc.id ? 'Modifier le bloc' : 'Nouveau bloc' }}</h1>
+    </header>
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.couleur) }}
+    {{ form_row(form.cotation) }}
+    {{ form_row(form.secteur) }}
+    {{ form_row(form.dateOuverture) }}
+    <button class="button" type="submit">Enregistrer</button>
+    {{ form_end(form) }}
+  </main>
+{% endblock %}

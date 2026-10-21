@@ -36,6 +36,24 @@
   {% endset %}
   <body class="{{ body_class|trim }}">
     <twig:Header />
+    {% set route = app.request.attributes.get('_route') ?? '' %}
+    {% set avecSousMenu = app.user
+      and (route == 'app_profil'
+      or route starts with 'app_bloc_'
+      or route starts with 'app_ascension_'
+      or route starts with 'app_admin_'
+        or route == 'app_ouvreur_show')
+    %}
+    {% if avecSousMenu %}
+      <twig:Subnav />
+    {% endif %}
+    {% for label, messages in app.flashes %}
+      {% for message in messages %}
+        <p class="flash flash-{{ label }}">
+          {{ message }}
+        </p>
+      {% endfor %}
+    {% endfor %}
     {% block body %}
 
     {% endblock %}

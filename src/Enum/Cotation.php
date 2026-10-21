@@ -23,6 +23,17 @@ enum Cotation: int
   case HuitA = 17;
   case HuitAPlus = 18;
 
+  public static function tryFromLabel(string $label): ?self
+  {
+    foreach (self::cases() as $cotation) {
+      if ($cotation->label() === $label) {
+        return $cotation;
+      }
+    }
+
+    return null;
+  }
+
   public function label(): string
   {
     return match ($this) {
@@ -44,6 +55,30 @@ enum Cotation: int
       self::SeptCPlus => '7C+',
       self::HuitA => '8A',
       self::HuitAPlus => '8A+',
+    };
+  }
+
+  public function explication(): string
+  {
+    return match ($this) {
+      self::Trois => 'Très facile. Grosses prises, pieds évidents : on monte presque comme sur une échelle.',
+      self::Quatre => 'Facile. Le chemin se lit tout seul, les prises restent confortables.',
+      self::Cinq => 'Accessible. Une prise un peu moins grosse, ou un pas à placer.',
+      self::CinqPlus => 'Un cran au-dessus du 5. Le mouvement demande déjà un peu d’attention.',
+      self::SixA => 'Début du niveau intermédiaire. Il faut une méthode, plus seulement tirer sur les bras.',
+      self::SixAPlus => 'Un 6A un peu plus dur : une prise plus petite, ou un pas de plus.',
+      self::SixB => 'Le corps doit être placé. Les pieds comptent autant que les mains.',
+      self::SixBPlus => 'Un 6B soutenu, souvent un geste précis au milieu du bloc.',
+      self::SixC => 'Niveau confirmé. Les prises sont petites, ou le pas est loin.',
+      self::SixCPlus => 'Presque un 7A. Ça passe si le geste est juste.',
+      self::SeptA => 'Dur. Pour qui grimpe régulièrement. Un mouvement clé bloque souvent.',
+      self::SeptAPlus => 'Un 7A avec une prise pire, ou un deuxième passage exigeant.',
+      self::SeptB => 'Très dur. La force et la lecture du bloc sont toutes les deux nécessaires.',
+      self::SeptBPlus => 'Le haut de ce que la plupart des grimpeurs assidus croisent dans la salle.',
+      self::SeptC => 'Niveau expert. Peu de réussites : le geste est spécifique.',
+      self::SeptCPlus => 'Tout près du 8A. Une erreur, et on retombe.',
+      self::HuitA => 'Le sommet de l’échelle, avant le +. Très peu de grimpeurs le sortent.',
+      self::HuitAPlus => 'Le plus dur ouvert ici. Au-dessus, la salle ne cote pas.',
     };
   }
 }

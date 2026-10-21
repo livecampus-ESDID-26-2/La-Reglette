@@ -18,10 +18,12 @@ class Ascension
   private ?int $id = null;
 
   #[ORM\Column]
+  #[Assert\NotNull(message: 'Indiquez la date de réussite.')]
   private ?\DateTimeImmutable $dateReussite = null;
 
   #[ORM\Column]
-  #[Assert\Range(min: 1, max: 5)]
+  #[Assert\NotNull(message: 'Donnez une note.')]
+  #[Assert\Range(min: 1, max: 5, notInRangeMessage: 'La note doit être comprise entre {{ min }} et {{ max }}.')]
   private ?int $note = null;
 
   #[ORM\Column(type: Types::TEXT, nullable: true)]

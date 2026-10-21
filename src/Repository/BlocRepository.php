@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Bloc;
+use App\Entity\User;
+use App\Model\BlocFiltre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,65 @@ class BlocRepository extends ServiceEntityRepository
     parent::__construct($registry, Bloc::class);
   }
 
-  //    /**
-  //     * @return Bloc[] Returns an array of Bloc objects
-  //     */
-  //    public function findByExampleField($value): array
-  //    {
-  //        return $this->createQueryBuilder('b')
-  //            ->andWhere('b.exampleField = :val')
-  //            ->setParameter('val', $value)
-  //            ->orderBy('b.id', 'ASC')
-  //            ->setMaxResults(10)
-  //            ->getQuery()
-  //            ->getResult()
-  //        ;
-  //    }
+  /**
+   * @return list<Bloc>
+   */
+  public function findEnPlace(BlocFiltre $filtre): array
+  {
+    $blocs = $this->createQueryBuilder('b')
+      ->addSelect('s', 'o')
+      ->innerJoin('b.secteur', 's')
+      ->innerJoin('b.ouvreur', 'o')
+      ->andWhere('b.dateDemontage IS NULL')
+      ->orderBy('b.dateOuverture', 'DESC')
+      ->addOrderBy('b.nom', 'ASC');
 
-  //    public function findOneBySomeField($value): ?Bloc
-  //    {
-  //        return $this->createQueryBuilder('b')
-  //            ->andWhere('b.exampleField = :val')
-  //            ->setParameter('val', $value)
-  //            ->getQuery()
-  //            ->getOneOrNullResult()
-  //        ;
-  //    }
+    if ($filtre->secteur !== null) {
+      $blocs->andWhere('b.secteur = :secteur')->setParameter('secteur', $filtre->secteur);
+    }
+
+    if ($filtre->cotationMin !== null) {
+      $blocs->andWhere('b.cotation >= :cotationMin')->setParameter('cotationMin', $filtre->cotationMin);
+    }
+
+    if ($filtre->cotationMax !== null) {
+      $blocs->andWhere('b.cotation <= :cotationMax')->setParameter('cotationMax', $filtre->cotationMax);
+    }
+
+    return $blocs->getQuery()->getResult();
+  }
+
+  /**
+   * @return list<Bloc>
+   */
+  public function findEnPlaceNonReussisPar(User $grimpeur): array
+  {
+    return $this->createQueryBuilder('b')
+      ->addSelect('s', 'o')
+      ->innerJoin('b.secteur', 's')
+      ->innerJoin('b.ouvreur', 'o')
+      ->andWhere('b.dateDemontage IS NULL')
+      ->andWhere('NOT EXISTS (SELECT a.id FROM App\Entity\Ascension a WHERE a.bloc = b AND a.grimpeur = :grimpeur)')
+      ->setParameter('grimpeur', $grimpeur)
+      ->orderBy('b.dateOuverture', 'DESC')
+      ->addOrderBy('b.nom', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
+
+  /**
+   * @return list<Bloc>
+   */
+  public function findByOuvreur(User $ouvreur): array
+  {
+    return $this->createQueryBuilder('b')
+      ->addSelect('s')
+      ->innerJoin('b.secteur', 's')
+      ->andWhere('b.ouvreur = :ouvreur')
+      ->setParameter('ouvreur', $ouvreur)
+      ->orderBy('b.dateOuverture', 'DESC')
+      ->addOrderBy('b.nom', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
 }
