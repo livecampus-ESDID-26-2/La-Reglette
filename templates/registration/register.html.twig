@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Inscription — La Réglette
+{% endblock %}
+
+{% block body %}
+  <main class="auth">
+    <h1>Créer un compte</h1>
+    <p class="auth-lead">
+      L'inscription donne le rôle grimpeur.
+    </p>
+
+    {{ form_start(registrationForm) }}
+    {{ form_row(registrationForm.prenom) }}
+    {{ form_row(registrationForm.nom) }}
+    {{ form_row(registrationForm.email) }}
+    {{ form_row(registrationForm.plainPassword) }}
+    <button type="submit">Créer le compte</button>
+    {{ form_end(registrationForm) }}
+
+    <p class="auth-switch">
+      Déjà inscrit ? <a href="{{ path('app_login') }}">Se connecter</a>
+    </p>
+  </main>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Connexion — La Réglette
+{% endblock %}
+
+{% block body %}
+  <main class="auth">
+    <h1>Connexion</h1>
+
+    {% if error %}
+      <p class="auth-error">
+        {{ error.messageKey|trans(error.messageData, 'security') }}
+      </p>
+    {% endif %}
+
+    {% if app.user %}
+      <p>
+        Vous êtes connecté en tant que {{ app.user.prenom }} {{ app.user.nom }}.
+      </p>
+      <p>
+        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+      </p>
+    {% else %}
+      <form method="post">
+        <label for="username">Adresse email</label>
+        <input
+          type="email"
+          value="{{ last_username }}"
+          name="_username"
+          id="username"
+          autocomplete="email"
+          required
+          autofocus
+        />
+
+        <label for="password">Mot de passe</label>
+        <input type="password" name="_password" id="password" autocomplete="current-password" required />
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+
+        <button type="submit">Se connecter</button>
+      </form>
+      <p class="auth-switch">
+        Pas encore de compte ? <a href="{{ path('app_register') }}">Créer un compte grimpeur</a>
+      </p>
+    {% endif %}
+  </main>
+{% endblock %}

@@ -1,0 +1,12 @@
+{
+    "private": true,
+    "scripts": {
+        "format": "prettier --write \"**/*.{php,twig,css}\"",
+        "format:check": "prettier --check \"**/*.{php,twig,css}\""
+    },
+    "devDependencies": {
+        "@prettier/plugin-php": "^0.26.0",
+        "@zackad/prettier-plugin-twig": "^0.17.0",
+        "prettier": "^3.6.2"
+    }
+}

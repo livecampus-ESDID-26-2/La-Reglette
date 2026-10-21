@@ -1,145 +1,170 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}La Réglette — salle d'escalade de bloc{% endblock %}
+{% block title %}
+  La Réglette — salle d'escalade de bloc
+{% endblock %}
+
+{% block body_class %}
+  page-home
+{% endblock %}
 
 {% block body %}
-<div class="home">
-    <header class="topbar">
-        <a class="brand" href="{{ path('app_home') }}">La Réglette</a>
-        <p class="topbar-note">Salle de bloc · troisième site</p>
-    </header>
-
+  <div class="home">
     <section class="hero">
-        <img
-            src="{{ asset(photos.salle.fichier) }}"
-            alt="{{ photos.salle.alt }}"
-            width="1500"
-            height="1000"
-        >
-        <div class="hero-copy">
-            <p class="kicker">Escalade de bloc</p>
-            <h1>La Réglette</h1>
-            <p class="lead">Un mur, une couleur, un départ et une arrivée. L'application de la salle remplace le tableau blanc de l'accueil.</p>
-        </div>
+      <img src="{{ asset(photos.salle.fichier) }}" alt="{{ photos.salle.alt }}" width="1500" height="1000" />
+      <div class="hero-copy">
+        <p class="kicker">
+          Escalade de bloc
+        </p>
+        <h1>La Réglette</h1>
+        <p class="lead">
+          Un mur, une couleur, un départ et une arrivée. L'application de la salle remplace le tableau blanc de
+          l'accueil.
+        </p>
+      </div>
     </section>
 
     <ul class="hold-strip" aria-hidden="true">
-        <li class="hold hold-yellow"></li>
-        <li class="hold hold-green"></li>
-        <li class="hold hold-blue"></li>
-        <li class="hold hold-red"></li>
-        <li class="hold hold-black"></li>
-        <li class="hold hold-white"></li>
-        <li class="hold hold-pink"></li>
-        <li class="hold hold-violet"></li>
+      <li class="hold hold-yellow"></li>
+      <li class="hold hold-green"></li>
+      <li class="hold hold-blue"></li>
+      <li class="hold hold-red"></li>
+      <li class="hold hold-black"></li>
+      <li class="hold hold-white"></li>
+      <li class="hold hold-pink"></li>
+      <li class="hold hold-violet"></li>
     </ul>
 
     <section class="intro">
-        <div>
-            <p class="section-index">01</p>
-            <h2>Une salle qui grandit</h2>
-        </div>
-        <div class="prose">
-            <p>La Réglette ouvre son troisième site. Jusqu'ici, les blocs en place tenaient sur un tableau blanc, et le suivi dans un fichier Excel partagé. Ça ne suffit plus.</p>
-            <p>Le bloc se grimpe sans corde, sur quelques mètres, au-dessus d'un tapis. Le nom de la salle désigne aussi une prise : la réglette, assez fine pour n'y poser que la dernière phalange.</p>
-            <p>L'application garde la mémoire de ce qui est ouvert, de qui l'a posé, et de qui l'a réussi.</p>
-        </div>
+      <div>
+        <p class="section-index">
+          01
+        </p>
+        <h2>Une salle qui grandit</h2>
+      </div>
+      <div class="prose">
+        <p>
+          La Réglette ouvre son troisième site. Jusqu'ici, les blocs en place tenaient sur un tableau blanc, et le suivi
+          dans un fichier Excel partagé. Ça ne suffit plus.
+        </p>
+        <p>
+          Le bloc se grimpe sans corde, sur quelques mètres, au-dessus d'un tapis. Le nom de la salle désigne aussi une
+          prise : la réglette, assez fine pour n'y poser que la dernière phalange.
+        </p>
+        <p>
+          L'application garde la mémoire de ce qui est ouvert, de qui l'a posé, et de qui l'a réussi.
+        </p>
+      </div>
     </section>
 
     <section class="lexique" id="lexique">
-        <header class="section-heading">
-            <p class="section-index">02</p>
-            <h2>Le vocabulaire du mur</h2>
-        </header>
-        <ol>
-            {% for entree in lexique %}
-                <li>
-                    <h3>{{ entree.terme }}</h3>
-                    <p>{{ entree.texte }}</p>
-                </li>
-            {% endfor %}
-        </ol>
+      <header class="section-heading">
+        <p class="section-index">
+          02
+        </p>
+        <h2>Le vocabulaire du mur</h2>
+      </header>
+      <ol>
+        {% for entree in lexique %}
+          <li>
+            <h3>{{ entree.terme }}</h3>
+            <p>
+              {{ entree.texte }}
+            </p>
+          </li>
+        {% endfor %}
+      </ol>
     </section>
 
     <section class="story">
-        <figure>
-            <img
-                src="{{ asset(photos.grimpeur.fichier) }}"
-                alt="{{ photos.grimpeur.alt }}"
-                width="1920"
-                height="2550"
-            >
-            <figcaption>
-                Réussir un bloc, c'est aller du départ à l'arrivée sans tomber.
-                <span>{{ photos.grimpeur.auteur }} · {{ photos.grimpeur.licence }}</span>
-            </figcaption>
+      <figure>
+        <img src="{{ asset(photos.grimpeur.fichier) }}" alt="{{ photos.grimpeur.alt }}" width="1920" height="2550" />
+        <figcaption>
+          Réussir un bloc, c'est aller du départ à l'arrivée sans tomber.
+          <span>{{ photos.grimpeur.auteur }} · {{ photos.grimpeur.licence }}</span>
+        </figcaption>
+      </figure>
+      <div class="story-copy">
+        <p class="section-index">
+          03
+        </p>
+        <h2>Ce que l'on vient chercher</h2>
+        <p>
+          Chaque bloc a un nom, une couleur de prises, une cotation officielle et une date d'ouverture. Tant qu'il est
+          en place, sa date de démontage reste vide.
+        </p>
+        <p>
+          Le démonter ne le supprime pas. Les réussites restent, pour les grimpeurs qui l'ont fait, et pour l'ouvreur
+          qui l'a imaginé.
+        </p>
+        <figure class="story-secondary">
+          <img src="{{ asset(photos.tapis.fichier) }}" alt="{{ photos.tapis.alt }}" width="1920" height="1289" />
+          <figcaption>
+            {{ photos.tapis.auteur }} · {{ photos.tapis.licence }}
+          </figcaption>
         </figure>
-        <div class="story-copy">
-            <p class="section-index">03</p>
-            <h2>Ce que l'on vient chercher</h2>
-            <p>Chaque bloc a un nom, une couleur de prises, une cotation officielle et une date d'ouverture. Tant qu'il est en place, sa date de démontage reste vide.</p>
-            <p>Le démonter ne le supprime pas. Les réussites restent, pour les grimpeurs qui l'ont fait, et pour l'ouvreur qui l'a imaginé.</p>
-            <figure class="story-secondary">
-                <img
-                    src="{{ asset(photos.tapis.fichier) }}"
-                    alt="{{ photos.tapis.alt }}"
-                    width="1920"
-                    height="1289"
-                >
-                <figcaption>{{ photos.tapis.auteur }} · {{ photos.tapis.licence }}</figcaption>
-            </figure>
-        </div>
+      </div>
     </section>
 
     <section class="roles" id="roles">
-        <header class="section-heading">
-            <p class="section-index">04</p>
-            <h2>Trois façons d'entrer dans la salle</h2>
-        </header>
-        <ol>
-            {% for role in roles %}
-                <li>
-                    <h3>{{ role.nom }}</h3>
-                    <p>{{ role.texte }}</p>
-                </li>
-            {% endfor %}
-        </ol>
+      <header class="section-heading">
+        <p class="section-index">
+          04
+        </p>
+        <h2>Trois façons d'entrer dans la salle</h2>
+      </header>
+      <ol>
+        {% for role in roles %}
+          <li>
+            <h3>{{ role.nom }}</h3>
+            <p>
+              {{ role.texte }}
+            </p>
+          </li>
+        {% endfor %}
+      </ol>
     </section>
 
     <section class="secteur">
-        <figure>
-            <img
-                src="{{ asset(photos.prises.fichier) }}"
-                alt="{{ photos.prises.alt }}"
-                width="1920"
-                height="1440"
-            >
-            <figcaption>{{ photos.prises.auteur }} · {{ photos.prises.licence }}</figcaption>
-        </figure>
-        <div>
-            <p class="section-index">05</p>
-            <h2>Lire un secteur</h2>
-            <p>Les prises d'une même couleur forment un bloc. Autour, d'autres couleurs racontent d'autres passages. Le secteur dit simplement où regarder : un pan, un toit, un dévers.</p>
-            <p>La cotation classe ces passages. Entre 6A et 8A, chaque niveau existe en version simple et en version « + ».</p>
-            <ol class="grades" aria-label="Échelle de cotation, de 3 à 8A+">
-                {% for cotation in cotations %}
-                    <li>{{ cotation }}</li>
-                {% endfor %}
-            </ol>
-        </div>
+      <figure>
+        <img src="{{ asset(photos.prises.fichier) }}" alt="{{ photos.prises.alt }}" width="1920" height="1440" />
+        <figcaption>
+          {{ photos.prises.auteur }} · {{ photos.prises.licence }}
+        </figcaption>
+      </figure>
+      <div>
+        <p class="section-index">
+          05
+        </p>
+        <h2>Lire un secteur</h2>
+        <p>
+          Les prises d'une même couleur forment un bloc. Autour, d'autres couleurs racontent d'autres passages. Le
+          secteur dit simplement où regarder : un pan, un toit, un dévers.
+        </p>
+        <p>
+          La cotation classe ces passages. Entre 6A et 8A, chaque niveau existe en version simple et en version « + ».
+        </p>
+        <ol class="grades" aria-label="Échelle de cotation, de 3 à 8A+">
+          {% for cotation in cotations %}
+            <li>{{ cotation }}</li>
+          {% endfor %}
+        </ol>
+      </div>
     </section>
 
-    <footer class="colophon">
-        <p>La Réglette · application interne de la salle.</p>
-        <p>Les photos viennent d'autres salles de bloc. Elles illustrent la pratique, ce ne sont pas les murs de La Réglette. Licences libres, auteurs cités.</p>
-        <ul>
-            {% for photo in photos %}
-                <li>
-                    <a href="{{ photo.source }}">{{ photo.auteur }}</a>
-                    · <a href="{{ photo.licenceUrl }}">{{ photo.licence }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </footer>
-</div>
+    <section class="credits">
+      <p>
+        Les photos viennent d'autres salles de bloc. Elles illustrent la pratique, ce ne sont pas les murs de La
+        Réglette. Licences libres, auteurs cités.
+      </p>
+      <ul>
+        {% for photo in photos %}
+          <li>
+            <a href="{{ photo.source }}">{{ photo.auteur }}</a>
+            · <a href="{{ photo.licenceUrl }}">{{ photo.licence }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
 {% endblock %}
