@@ -67,6 +67,41 @@ class BlocRepository extends ServiceEntityRepository
   /**
    * @return list<Bloc>
    */
+  public function findEnPlaceSansReussiteRecente(\DateTimeImmutable $depuis): array
+  {
+    return $this->createQueryBuilder('b')
+      ->addSelect('s')
+      ->innerJoin('b.secteur', 's')
+      ->andWhere('b.dateDemontage IS NULL')
+      ->andWhere('b.dateOuverture <= :depuis')
+      ->andWhere('NOT EXISTS (SELECT a.id FROM App\Entity\Ascension a WHERE a.bloc = b AND a.dateReussite >= :depuis)')
+      ->setParameter('depuis', $depuis)
+      ->orderBy('b.dateOuverture', 'ASC')
+      ->addOrderBy('b.nom', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
+
+  /**
+   * @return list<Bloc>
+   */
+  public function findEnPlaceOuvertsAvant(\DateTimeImmutable $avant): array
+  {
+    return $this->createQueryBuilder('b')
+      ->addSelect('s')
+      ->innerJoin('b.secteur', 's')
+      ->andWhere('b.dateDemontage IS NULL')
+      ->andWhere('b.dateOuverture < :avant')
+      ->setParameter('avant', $avant)
+      ->orderBy('b.dateOuverture', 'ASC')
+      ->addOrderBy('b.nom', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
+
+  /**
+   * @return list<Bloc>
+   */
   public function findByOuvreur(User $ouvreur): array
   {
     return $this->createQueryBuilder('b')

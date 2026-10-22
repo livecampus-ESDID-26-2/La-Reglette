@@ -6,8 +6,10 @@ use App\Entity\Ascension;
 use App\Entity\Bloc;
 use App\Entity\User;
 use App\Form\AscensionType;
+use App\Message\RecalculerStatistiquesBloc;
 use App\Repository\AscensionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +25,7 @@ final class AscensionController extends AbstractController
     Bloc $bloc,
     EntityManagerInterface $em,
     AscensionRepository $ascensions,
+    MessageBusInterface $bus,
   ): Response {
     $grimpeur = $this->getUser();
     if (!($grimpeur instanceof User)) {
@@ -38,6 +41,7 @@ final class AscensionController extends AbstractController
     if ($form->isSubmitted() && $form->isValid()) {
       $em->persist($ascension);
       $em->flush();
+      $bus->dispatch(new RecalculerStatistiquesBloc((int) $bloc->getId()));
       $this->addFlash('success', 'Réussite enregistrée.');
 
       return $this->redirectToRoute('app_bloc_show', ['id' => $bloc->getId()]);
@@ -64,16 +68,24 @@ final class AscensionController extends AbstractController
   }
 
   #[Route('/ascensions/{id}/supprimer', name: 'app_ascension_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
-  public function supprimer(Request $request, Ascension $ascension, EntityManagerInterface $em): Response
-  {
+  public function supprimer(
+    Request $request,
+    Ascension $ascension,
+    EntityManagerInterface $em,
+    MessageBusInterface $bus,
+  ): Response {
     $this->denyAccessUnlessGranted('ASCENSION_DELETE', $ascension);
 
     if (!$this->isCsrfTokenValid('supprimer' . $ascension->getId(), $request->request->getString('_token'))) {
       throw $this->createAccessDeniedException('Jeton invalide.');
     }
 
+    $blocId = $ascension->getBloc()?->getId();
     $em->remove($ascension);
     $em->flush();
+    if ($blocId !== null) {
+      $bus->dispatch(new RecalculerStatistiquesBloc($blocId));
+    }
     $this->addFlash('success', 'Réussite supprimée.');
 
     return $this->redirectToRoute('app_ascension_index');

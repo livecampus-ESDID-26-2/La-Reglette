@@ -48,4 +48,24 @@ class AscensionRepository extends ServiceEntityRepository
       ->getQuery()
       ->getResult();
   }
+
+  /**
+   * @return array{nombre: int, moyenne: ?float}
+   */
+  public function agregerPourBloc(Bloc $bloc): array
+  {
+    $ligne = $this->createQueryBuilder('a')
+      ->select('COUNT(a.id) AS nombre', 'AVG(a.note) AS moyenne')
+      ->andWhere('a.bloc = :bloc')
+      ->setParameter('bloc', $bloc)
+      ->getQuery()
+      ->getSingleResult();
+
+    $nombre = (int) $ligne['nombre'];
+
+    return [
+      'nombre' => $nombre,
+      'moyenne' => $nombre === 0 || $ligne['moyenne'] === null ? null : round((float) $ligne['moyenne'], 2),
+    ];
+  }
 }
