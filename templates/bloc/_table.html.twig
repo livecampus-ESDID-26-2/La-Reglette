@@ -1,49 +1,57 @@
-<table class="data">
-  <thead>
-    <tr>
-      <th>Nom</th>
-      <th>Cotation</th>
-      <th>Couleur</th>
-      <th>Secteur</th>
-      <th>Ouverture</th>
-      {% if avecDemontage|default(false) %}
-        <th>Démontage</th>
-      {% endif %}
-      <th>Réussites</th>
-      <th>Note</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for bloc in blocs %}
+<div class="board">
+  <table class="data">
+    <thead>
       <tr>
-        <td>
-          <a
-            href="{{
-            path(
-              'app_bloc_show',
-              {
-                id: bloc.id
-              }
-            )
-            }}"
-          >
-            {{ bloc.nom }}
-          </a>
-        </td>
-        <td>{{ bloc.cotation.label }}</td>
-        <td>{{ bloc.couleur.label }}</td>
-        <td>{{ bloc.secteur.nom }}</td>
-        <td>{{ bloc.dateOuverture|date('d/m/Y') }}</td>
+        <th>Nom</th>
+        <th>Cotation</th>
+        <th>Couleur</th>
+        <th>Secteur</th>
+        <th>Ouverture</th>
         {% if avecDemontage|default(false) %}
-          <td>{{ bloc.dateDemontage ? bloc.dateDemontage|date('d/m/Y') : 'En place' }}</td>
+          <th>Démontage</th>
         {% endif %}
-        <td>{{ bloc.nombreReussites }}</td>
-        <td>{{ bloc.noteMoyenne is null ? '—' : bloc.noteMoyenne|number_format(1, ',') }}</td>
+        <th class="num">Réussites</th>
+        <th class="num">Note</th>
       </tr>
-    {% else %}
-      <tr>
-        <td colspan="{{ avecDemontage|default(false) ? 8 : 7 }}">Aucun bloc.</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {% for bloc in blocs %}
+        <tr>
+          <td>
+            <a
+              class="name"
+              href="{{
+              path(
+                'app_bloc_show',
+                {
+                  id: bloc.id
+                }
+              )
+              }}"
+            >
+              {{ bloc.nom }}
+            </a>
+          </td>
+          <td><span class="grade">{{ bloc.cotation.label }}</span></td>
+          <td>
+            <span class="color-name">
+              <span class="dot {{ bloc.couleur.pastille }}"></span>
+              {{ bloc.couleur.label|capitalize }}
+            </span>
+          </td>
+          <td>{{ bloc.secteur.nom }}</td>
+          <td class="meta">{{ bloc.dateOuverture|date('d/m/Y') }}</td>
+          {% if avecDemontage|default(false) %}
+            <td class="meta">{{ bloc.dateDemontage ? bloc.dateDemontage|date('d/m/Y') : 'En place' }}</td>
+          {% endif %}
+          <td class="num">{{ bloc.nombreReussites }}</td>
+          <td class="num">{{ bloc.noteMoyenne is null ? '—' : bloc.noteMoyenne|number_format(1, ',') }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="{{ avecDemontage|default(false) ? 8 : 7 }}">Aucun bloc.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

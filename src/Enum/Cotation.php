@@ -34,6 +34,11 @@ enum Cotation: int
     return null;
   }
 
+  public function experience(): int
+  {
+    return $this->value * 8;
+  }
+
   public function label(): string
   {
     return match ($this) {

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Bloc;
 use App\Entity\User;
+use App\Enum\Cotation;
 use App\Model\BlocFiltre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -60,6 +61,29 @@ class BlocRepository extends ServiceEntityRepository
       ->setParameter('grimpeur', $grimpeur)
       ->orderBy('b.dateOuverture', 'DESC')
       ->addOrderBy('b.nom', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
+
+  /**
+   * @return list<Bloc>
+   */
+  public function findEnPlaceARecommander(User $grimpeur, Cotation $min, Cotation $max, int $limite = 5): array
+  {
+    return $this->createQueryBuilder('b')
+      ->addSelect('s', 'o')
+      ->innerJoin('b.secteur', 's')
+      ->innerJoin('b.ouvreur', 'o')
+      ->andWhere('b.dateDemontage IS NULL')
+      ->andWhere('b.cotation >= :min')
+      ->andWhere('b.cotation <= :max')
+      ->andWhere('NOT EXISTS (SELECT a.id FROM App\Entity\Ascension a WHERE a.bloc = b AND a.grimpeur = :grimpeur)')
+      ->setParameter('grimpeur', $grimpeur)
+      ->setParameter('min', $min)
+      ->setParameter('max', $max)
+      ->orderBy('b.cotation', 'ASC')
+      ->addOrderBy('b.dateOuverture', 'DESC')
+      ->setMaxResults($limite)
       ->getQuery()
       ->getResult();
   }

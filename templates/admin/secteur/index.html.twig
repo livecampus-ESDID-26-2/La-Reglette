@@ -11,51 +11,58 @@
         Admin
       </p>
       <h1>Secteurs</h1>
+      <p class="sheet-count">
+        {{ secteurs|length }} zones de la salle.
+      </p>
     </header>
 
-    <section class="sheet-block sheet-narrow">
-      <h2>Nouveau secteur</h2>
-      {{ form_start(form) }}
-      {{ form_errors(form) }}
-      {{ form_row(form.nom) }}
-      <button class="button" type="submit">Créer</button>
-      {{ form_end(form) }}
-    </section>
+    <div class="split">
+      <section class="form-panel">
+        <h2>Nouveau secteur</h2>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.nom) }}
+        <button class="button" type="submit">Créer</button>
+        {{ form_end(form) }}
+      </section>
 
-    <table class="data">
-      <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Blocs</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for secteur in secteurs %}
-          <tr>
-            <td>{{ secteur.nom }}</td>
-            <td>{{ secteur.blocs|length }}</td>
-            <td>
-              <a
-                href="{{
-                path(
-                  'app_admin_secteur_edit',
-                  {
-                    id: secteur.id
-                  }
-                )
-                }}"
-              >
-                Modifier
-              </a>
-            </td>
-          </tr>
-        {% else %}
-          <tr>
-            <td colspan="3">Aucun secteur.</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      <div class="board">
+        <table class="data">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th class="num">Blocs</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for secteur in secteurs %}
+              <tr>
+                <td class="name">{{ secteur.nom }}</td>
+                <td class="num">{{ secteur.blocs|length }}</td>
+                <td>
+                  <a
+                    href="{{
+                    path(
+                      'app_admin_secteur_edit',
+                      {
+                        id: secteur.id
+                      }
+                    )
+                    }}"
+                  >
+                    Modifier
+                  </a>
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="3">Aucun secteur.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </main>
 {% endblock %}

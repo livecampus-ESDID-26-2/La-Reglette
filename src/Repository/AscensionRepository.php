@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Ascension;
 use App\Entity\Bloc;
 use App\Entity\User;
+use App\Enum\Cotation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -47,6 +48,21 @@ class AscensionRepository extends ServiceEntityRepository
       ->orderBy('a.dateReussite', 'DESC')
       ->getQuery()
       ->getResult();
+  }
+
+  /**
+   * @return list<array{cotation: Cotation|int|string, nombre: int|string}>
+   */
+  public function compterBlocsReussisParCotation(User $grimpeur): array
+  {
+    return $this->createQueryBuilder('a')
+      ->select('b.cotation AS cotation', 'COUNT(DISTINCT b.id) AS nombre')
+      ->innerJoin('a.bloc', 'b')
+      ->andWhere('a.grimpeur = :grimpeur')
+      ->setParameter('grimpeur', $grimpeur)
+      ->groupBy('b.cotation')
+      ->getQuery()
+      ->getArrayResult();
   }
 
   /**

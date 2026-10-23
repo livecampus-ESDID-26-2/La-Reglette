@@ -5,12 +5,71 @@
 {% endblock %}
 
 {% block body %}
-  <main class="sheet sheet-narrow">
+  {% set role = app.user.rolePrincipal %}
+  <main class="sheet">
     <header class="sheet-heading">
       <p class="section-index">
         Compte
       </p>
       <h1>{{ app.user.prenom }} {{ app.user.nom }}</h1>
+      <p class="sheet-count">
+        {{ app.user.email }}
+      </p>
     </header>
+
+    <div class="split">
+      <section class="form-panel">
+        <dl class="account">
+          <div>
+            <dt>
+              Prénom
+            </dt>
+            <dd>{{ app.user.prenom }}</dd>
+          </div>
+          <div>
+            <dt>
+              Nom
+            </dt>
+            <dd>{{ app.user.nom }}</dd>
+          </div>
+          <div>
+            <dt>
+              Email
+            </dt>
+            <dd>{{ app.user.email }}</dd>
+          </div>
+          <div>
+            <dt>
+              Rôle
+            </dt>
+            <dd>{{ role == 'ROLE_ADMIN' ? 'Admin' : role == 'ROLE_OUVREUR' ? 'Ouvreur' : 'Grimpeur' }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      {% include 'progression/_niveau.html.twig' with {
+        niveau: niveau
+      } %}
+    </div>
+
+    <section class="sheet-block">
+      <h2>Blocs à tenter</h2>
+      {% if recommandations is empty %}
+        <p class="sheet-count">
+          Tu as déjà réussi les blocs proches de ton niveau qui sont encore au mur.
+        </p>
+      {% else %}
+        <p class="sheet-count">
+          {% if recommandations|first.cotation == recommandations|last.cotation %}
+            Encore en place, en {{ recommandations|first.cotation.label }}, d'après tes réussites.
+          {% else %}
+            Encore en place, de {{ recommandations|first.cotation.label }} à {{ recommandations|last.cotation.label }}, d'après tes réussites.
+          {% endif %}
+        </p>
+        {% include 'bloc/_table.html.twig' with {
+          blocs: recommandations
+        } %}
+      {% endif %}
+    </section>
   </main>
 {% endblock %}

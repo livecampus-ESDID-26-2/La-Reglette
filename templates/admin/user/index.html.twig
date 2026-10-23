@@ -11,39 +11,44 @@
         Admin
       </p>
       <h1>Comptes</h1>
+      <p class="sheet-count">
+        {{ comptes|length }} personnes. Le rôle enregistré est le plus élevé.
+      </p>
     </header>
 
-    <table class="data">
-      <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Email</th>
-          <th>Rôle</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for compte in comptes %}
+    <div class="board">
+      <table class="data">
+        <thead>
           <tr>
-            <td>{{ compte.prenom }} {{ compte.nom }}</td>
-            <td>{{ compte.email }}</td>
-            <td>
-              {{
-                form_start(
-                  forms[compte.id],
-                  {
-                    attr: {
-                      class: 'inline-form'
-                    }
-                  }
-                )
-              }}
-              {{ form_widget(forms[compte.id].role) }}
-              <button class="button" type="submit">Enregistrer</button>
-              {{ form_end(forms[compte.id]) }}
-            </td>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Rôle</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for compte in comptes %}
+            <tr>
+              <td class="name">{{ compte.prenom }} {{ compte.nom }}</td>
+              <td class="meta">{{ compte.email }}</td>
+              <td>
+                {{
+                  form_start(
+                    forms[compte.id],
+                    {
+                      attr: {
+                        class: 'inline-form'
+                      }
+                    }
+                  )
+                }}
+                {{ form_widget(forms[compte.id].role) }}
+                <button class="button" type="submit">Enregistrer</button>
+                {{ form_end(forms[compte.id]) }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </main>
 {% endblock %}

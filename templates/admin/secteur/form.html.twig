@@ -13,11 +13,13 @@
       <h1>Modifier le secteur</h1>
     </header>
 
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
-    {{ form_row(form.nom) }}
-    <button class="button" type="submit">Enregistrer</button>
-    {{ form_end(form) }}
+    <div class="form-panel">
+      {{ form_start(form) }}
+      {{ form_errors(form) }}
+      {{ form_row(form.nom) }}
+      <button class="button" type="submit">Enregistrer</button>
+      {{ form_end(form) }}
+    </div>
     <p>
       <a href="{{ path('app_admin_secteur_index') }}">Retour aux secteurs</a>
     </p>

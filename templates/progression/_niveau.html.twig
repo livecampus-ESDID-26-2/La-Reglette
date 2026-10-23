@@ -1,0 +1,29 @@
+<section class="form-panel level">
+  <div class="level-head">
+    <div>
+      <p class="section-index">
+        Niveau {{ niveau.niveau }}
+      </p>
+      <p class="level-titre">
+        {{ niveau.titre }}
+      </p>
+    </div>
+    <p class="level-xp">
+      {{ niveau.experienceDansNiveau }} / {{ niveau.experienceDuPalier }} XP
+    </p>
+  </div>
+  <div
+    class="level-track"
+    style="--progression: {{ niveau.pourcentage }}%"
+    role="progressbar"
+    aria-valuenow="{{ niveau.pourcentage }}"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-label="Expérience du niveau {{ niveau.niveau }}"
+  >
+    <span></span>
+  </div>
+  <p class="sheet-count">
+    {{ niveau.experience }} XP · {{ niveau.blocsReussis }} blocs réussis. Une cotation plus haute rapporte plus.
+  </p>
+</section>

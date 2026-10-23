@@ -9,6 +9,7 @@ use App\Form\AscensionType;
 use App\Form\BlocFilterType;
 use App\Form\BlocType;
 use App\Model\BlocFiltre;
+use App\Progression\CalculNiveau;
 use App\Repository\AscensionRepository;
 use App\Repository\BlocRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,15 +37,19 @@ final class BlocController extends AbstractController
   }
 
   #[Route('/a-reussir', name: 'app_bloc_a_reussir', methods: ['GET'])]
-  public function aReussir(BlocRepository $blocs): Response
+  public function aReussir(BlocRepository $blocs, CalculNiveau $niveaux): Response
   {
     $grimpeur = $this->getUser();
     if (!($grimpeur instanceof User)) {
       throw $this->createAccessDeniedException();
     }
 
+    $niveau = $niveaux->pour($grimpeur);
+
     return $this->render('bloc/a_reussir.html.twig', [
       'blocs' => $blocs->findEnPlaceNonReussisPar($grimpeur),
+      'niveau' => $niveau,
+      'recommandations' => $niveaux->recommander($grimpeur, $niveau),
     ]);
   }
 

@@ -11,16 +11,21 @@
         Ouverture
       </p>
       <h1>{{ bloc.id ? 'Modifier le bloc' : 'Nouveau bloc' }}</h1>
+      <p class="sheet-count">
+        Nom, couleur, cotation, secteur et date d'ouverture.
+      </p>
     </header>
 
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
-    {{ form_row(form.nom) }}
-    {{ form_row(form.couleur) }}
-    {{ form_row(form.cotation) }}
-    {{ form_row(form.secteur) }}
-    {{ form_row(form.dateOuverture) }}
-    <button class="button" type="submit">Enregistrer</button>
-    {{ form_end(form) }}
+    <div class="form-panel">
+      {{ form_start(form) }}
+      {{ form_errors(form) }}
+      {{ form_row(form.nom) }}
+      {{ form_row(form.couleur) }}
+      {{ form_row(form.cotation) }}
+      {{ form_row(form.secteur) }}
+      {{ form_row(form.dateOuverture) }}
+      <button class="button" type="submit">Enregistrer</button>
+      {{ form_end(form) }}
+    </div>
   </main>
 {% endblock %}

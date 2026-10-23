@@ -16,8 +16,35 @@
       </p>
     </header>
 
-    {% include 'bloc/_table.html.twig' with {
-      blocs: blocs
+    {% include 'progression/_niveau.html.twig' with {
+      niveau: niveau
     } %}
+
+    <section class="sheet-block">
+      <h2>Pour ton niveau</h2>
+      {% if recommandations is empty %}
+        <p class="sheet-count">
+          Rien à proposer près de ton niveau pour l'instant.
+        </p>
+      {% else %}
+        <p class="sheet-count">
+          {% if recommandations|first.cotation == recommandations|last.cotation %}
+            Les blocs en {{ recommandations|first.cotation.label }} qui te correspondent.
+          {% else %}
+            Les blocs de {{ recommandations|first.cotation.label }} à {{ recommandations|last.cotation.label }} qui te correspondent.
+          {% endif %}
+        </p>
+        {% include 'bloc/_table.html.twig' with {
+          blocs: recommandations
+        } %}
+      {% endif %}
+    </section>
+
+    <section class="sheet-block">
+      <h2>Tout ce qu'il reste</h2>
+      {% include 'bloc/_table.html.twig' with {
+        blocs: blocs
+      } %}
+    </section>
   </main>
 {% endblock %}
